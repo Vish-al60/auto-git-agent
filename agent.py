@@ -7,7 +7,8 @@ REPO_PATH = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_DIR = os.path.join(REPO_PATH, "data")
 
 URLS = {
-    "google_doc": "https://docs.google.com/document/d/1YG2bbiTAWMzcpoAEsRCA0JhLeeG3yJdlMgbfKum2Yg0/export?format=txt"
+    "google_doc": "https://docs.google.com/document/d/1YG2bbiTAWMzcpoAEsRCA0JhLeeG3yJdlMgbfKum2Yg0/edit?usp=sharing/export?format=txt"
+		
 }
 
 def download_files():
