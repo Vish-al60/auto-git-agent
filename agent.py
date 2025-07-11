@@ -25,10 +25,18 @@ def download_files():
 def commit_and_push():
     os.chdir(REPO_PATH)
     subprocess.run(["git", "add", "."], check=True)
+    
+    # check if there is anything to commit
+    result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+    if result.stdout.strip() == "":
+        print("[GIT] No changes to commit.")
+        return
+    
     msg = f"Auto commit on {datetime.now().strftime('%Y-%m-%d')}"
     subprocess.run(["git", "commit", "-m", msg], check=True)
     subprocess.run(["git", "push"], check=True)
     print("[DONE] Changes pushed to GitHub")
+
 
 def main():
     download_files()
