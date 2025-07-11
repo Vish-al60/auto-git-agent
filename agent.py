@@ -7,16 +7,20 @@ REPO_PATH = os.path.dirname(os.path.abspath(__file__))
 DOWNLOAD_DIR = os.path.join(REPO_PATH, "data")
 
 URLS = {
-    "google_doc": "https://docs.google.com/document/d/1YG2bbiTAWMzcpoAEsRCA0JhLeeG3yJdlMgbfKum2Yg0/edit?usp=sharing/export?format=txt"
-		
+    "google_doc": {
+        "url": "https://docs.google.com/document/d/1YG2bbiTAWMzcpoAEsRCA0JhLeeG3yJdlMgbfKum2Yg0/export?format=docx",
+        "ext": "docx"
+    }
 }
 
 def download_files():
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-    for name, url in URLS.items():
+    for name, data in URLS.items():
+        url = data["url"]
+        ext = data["ext"]
         response = requests.get(url)
         if response.status_code == 200:
-            file_path = os.path.join(DOWNLOAD_DIR, f"{name}.txt")
+            file_path = os.path.join(DOWNLOAD_DIR, f"{name}.{ext}")
             with open(file_path, "wb") as f:
                 f.write(response.content)
             print(f"[OK] Downloaded and saved: {file_path}")
@@ -27,7 +31,6 @@ def commit_and_push():
     os.chdir(REPO_PATH)
     subprocess.run(["git", "add", "."], check=True)
     
-    # check if there is anything to commit
     result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
     if result.stdout.strip() == "":
         print("[GIT] No changes to commit.")
@@ -37,7 +40,6 @@ def commit_and_push():
     subprocess.run(["git", "commit", "-m", msg], check=True)
     subprocess.run(["git", "push"], check=True)
     print("[DONE] Changes pushed to GitHub")
-
 
 def main():
     download_files()
